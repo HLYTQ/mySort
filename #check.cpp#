@@ -1,0 +1,76 @@
+#include <time.h>
+#include <stdio.h>
+#include "check.h"
+#include "mySort.h"
+
+CHECK_TIME_RESULT(arrInsert);
+CHECK_TIME_RESULT(arrHeap);
+CHECK_TIME_RESULT(bubbleSort);
+CHECK_TIME_RESULT(qSort);
+CHECK_TIME_RESULT(shellSort);
+
+
+bool createCheckData() {
+
+	srand((unsigned int)time(NULL));
+
+	FILE* file;
+
+	if ((file = fopen("data.txt", "w")) == NULL) {  //重定向文件的输入
+		printf("Not find file\n");
+		return false;
+	}
+
+	WRITE_TO_FILE_NUM(file, N1, rand() % DATA_SIZE);
+	fprintf(file, "\n");
+	WRITE_TO_FILE_NUM(file, N2, rand() % DATA_SIZE);
+	fprintf(file, "\n");
+	WRITE_TO_FILE_NUM(file, N3, rand() % DATA_SIZE);
+	fprintf(file, "\n");
+	WRITE_TO_FILE_NUM(file, N4, rand() % DATA_SIZE);
+	fprintf(file, "\n");
+
+	fclose(file);
+	return true;
+}
+
+void readData(const char* restrict_file,type* arr_first,type* arr_second,type* arr_third,type* arr_fourth) {
+	FILE* fp_r;
+	if ((fp_r = fopen(restrict_file, "r")) == NULL) {
+		printf("Not find file\n");
+		exit(0);
+	}
+	//读入数据
+	READ_FROM_FILE(fp_r, N1, arr_first);
+	READ_FROM_FILE(fp_r, N2, arr_second);
+	READ_FROM_FILE(fp_r, N3, arr_third);
+	READ_FROM_FILE(fp_r, N4, arr_fourth);
+
+	fclose(fp_r);
+}
+
+void writeData(const char* restrict_file,type* arr_first, type* arr_second, type* arr_third, type* arr_fourth) {
+	FILE* fp_w;
+	if ((fp_w = fopen(restrict_file, "w")) == NULL) {
+		printf("error\n");
+		exit(0);
+	}
+	WRITE_TO_FILE_PTR(fp_w, N1, arr_first);
+	WRITE_TO_FILE_PTR(fp_w, N2, arr_second);
+	WRITE_TO_FILE_PTR(fp_w, N3, arr_third);
+	WRITE_TO_FILE_PTR(fp_w, N4, arr_fourth);
+
+	fclose(fp_w);
+}
+
+void checkTimeResult(sort_time_p result,type* arr_first, type* arr_second, type* arr_third, type* arr_fourth) {
+	USING_CONTAIN_RES(insert_t);
+	readData("data.txt", arr_first, arr_second, arr_third, arr_fourth);
+	USING_CONTAIN_RES(bubble_t);
+	readData("data.txt", arr_first, arr_second, arr_third, arr_fourth);
+	USING_CONTAIN_RES(heap_t);
+	readData("data.txt", arr_first, arr_second, arr_third, arr_fourth);
+	USING_CONTAIN_RES(quick_t);
+	readData("data.txt", arr_first, arr_second, arr_third, arr_fourth);
+	USING_CONTAIN_RES(selection_t);
+}
